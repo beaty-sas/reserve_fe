@@ -1,14 +1,17 @@
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MDButton from "../components/MDButton";
 import Header from "../layouts/booking/Header";
 import UserOffersTable from "../layouts/tables/userOffers";
 import PageLayout from "../layouts/containers/page";
 import { useQuery } from "@tanstack/react-query";
 import { getBusiness } from "../services/bookingPage";
+import { useState } from "react";
+import { BusinessOffer } from "../types/business";
 
 
 function Booking() {
   const params = useParams();
+  const navigate = useNavigate();
   const {
     data,
     isSuccess,
@@ -17,6 +20,7 @@ function Booking() {
     queryFn: () => getBusiness(Number(params.id) as number),
     queryKey: ['business'],
   });
+  const [selectedOffers, setSelectedOffers] = useState<Array<BusinessOffer>>([])
 
   if (!isSuccess || !isFetched) {
     return (<></>)
@@ -25,16 +29,19 @@ function Booking() {
   return (
     <PageLayout>
       <Header business={data}>
-        <UserOffersTable />
+        <UserOffersTable
+          setSelectedOffers={setSelectedOffers}
+          selectedOffers={selectedOffers}
+        />
         <MDButton
-          component={Link}
-          to={"/order/details"}
+          onClick={() => navigate(`/booking/${params.id}/confirm`, { state: { selectedOffers } })}
+          state={selectedOffers}
           rel="noreferrer"
           variant="outlined"
           size="large"
           color={"info"}
         >
-          {"Підтвердити"}
+          {"Далі"}
         </MDButton>
       </Header>
     </PageLayout>

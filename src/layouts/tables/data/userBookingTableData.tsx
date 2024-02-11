@@ -7,13 +7,9 @@ import { useParams } from "react-router-dom";
 import { BusinessOffer } from "../../../types/business";
 
 
-export default function data() {
+export default function data(selectedOffers: Array<BusinessOffer>, setSelectedOffers: any) {
   const params = useParams();
-  const {
-    data,
-    isSuccess,
-    isFetched,
-  } = useQuery({
+  const { data } = useQuery({
     queryFn: () => getBusinessOffers(Number(params.id) as number),
     queryKey: ['offers'],
   });
@@ -33,13 +29,13 @@ export default function data() {
     // Format the duration
     let duration = '';
     if (hours > 0) {
-        duration += hours + ' год ';
+      duration += hours + ' год ';
     }
     if (minutes > 0 || hours === 0) {
-        duration += minutes + ' мін';
+      duration += minutes + ' мін';
     }
     return duration;
-}
+  }
 
   return {
     columns: [
@@ -61,7 +57,17 @@ export default function data() {
           {secondsToDuration(offer.duration)}
         </MDTypography>
       ),
-      action: (<Checkbox />),
+      action: (
+        <Checkbox
+          checked={selectedOffers.includes(offer)}
+          onChange={(_, checked) => {
+            if (checked) {
+              setSelectedOffers([...selectedOffers, offer])
+            } else {
+              setSelectedOffers(selectedOffers.filter((selectedOffer) => selectedOffer.id !== offer.id))
+            }
+          }}
+        />),
     })) ?? []
   };
 }

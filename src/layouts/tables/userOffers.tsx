@@ -4,9 +4,15 @@ import MDBox from "../../components/MDBox";
 import MDTypography from "../../components/MDTypography";
 import userBookingTableData from "./data/userBookingTableData"
 import DataTable from "./components";
+import { BusinessOffer } from "../../types/business";
 
-function UserOffersTable() {
-  const { columns, rows } = userBookingTableData();
+type Props = {
+  setSelectedOffers(value: Array<BusinessOffer>): void
+  selectedOffers: Array<BusinessOffer>
+}
+
+function UserOffersTable({ selectedOffers, setSelectedOffers }: Props) {
+  const { columns, rows } = userBookingTableData(selectedOffers, setSelectedOffers);
 
   return (
     <MDBox pt={6} pb={3}>

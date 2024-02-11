@@ -16,7 +16,29 @@ export type Business = {
 }
 
 export type BusinessOffer = {
+  id: number
   name: string
   price: number
   duration: number
+}
+
+export type AvailableHoursRequest = {
+  date: string
+  duration: number
+}
+
+export type AvailableTime = {
+  time: string
+}
+
+export type UserObject = {
+  display_name: string
+  phone_number: string
+}
+
+export type CreateOrderRequest = {
+  start_time: string
+  business_id: number
+  offers: Array<number>
+  user: UserObject
 }
