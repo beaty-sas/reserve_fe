@@ -1,11 +1,6 @@
-FROM node:16-alpine
-
-RUN apk update && apk add build-base g++ python3 bash
-
+FROM node:18-alpine
 WORKDIR /app
-
-COPY package.json yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
+COPY package.json ./
+RUN apk update && apk add build-base g++ python3 bash \
+  && npm install
 COPY . .
