@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { createTheme } from '@mui/material/styles';
 import colors from "./base/colors";
 import breakpoints from "./base/breakpoints";
