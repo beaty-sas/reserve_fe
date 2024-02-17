@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import MDBox from "../../../components/MDBox";
 
-function DataTableBodyCell({ noBorder, align, children }: any) {
+function DataTableBodyCell({ noBorder, align, children, width }: any) {
   return (
     <MDBox
       component="td"
+      width={width}
       textAlign={align}
       py={1.5}
-      px={3}
       sx={({ palette: { light }, typography: { size }, borders: { borderWidth } }: any) => ({
         fontSize: size.sm,
         borderBottom: noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`,

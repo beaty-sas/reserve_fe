@@ -14,10 +14,13 @@ export default function data(selectedOffers: Array<BusinessOffer>, setSelectedOf
     queryKey: ['offers'],
   });
 
-  const Offer = ({ name }: any) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
+  const Offer = ({ name, duration }: any) => (
+    <MDBox display="flex" alignItems="start" lineHeight={1} flexDirection={'column'}>
       <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
         {name}
+      </MDTypography>
+      <MDTypography variant="button" color="text" fontWeight="regular" ml={1} mt={1} lineHeight={1}>
+        {duration}
       </MDTypography>
     </MDBox>
   );
@@ -29,32 +32,26 @@ export default function data(selectedOffers: Array<BusinessOffer>, setSelectedOf
     // Format the duration
     let duration = '';
     if (hours > 0) {
-      duration += hours + ' год ';
+      duration += hours + ' год';
     }
     if (minutes > 0 || hours === 0) {
-      duration += minutes + ' мін';
+      duration += minutes + ' хвилин';
     }
     return duration;
   }
 
   return {
     columns: [
-      { Header: "Назва", accessor: "name", width: "70%", align: "left" },
-      { Header: "Тривалість", accessor: "duration", align: "center" },
-      { Header: "Вартість", accessor: "amount", align: "left" },
-      { Header: "Вибрати", accessor: "action", align: "center" },
+      { Header: "Назва", accessor: "name", align: "left", width: "80%" },
+      { Header: "Вартість", accessor: "amount", align: "right", width: "10%" },
+      { Header: "Вибрати", accessor: "action", align: "left", width: "10%"},
     ],
 
     rows: data?.map((offer: BusinessOffer) => ({
-      name: <Offer name={offer.name} />,
+      name: <Offer name={offer.name} duration={secondsToDuration(offer.duration)} />,
       amount: (
-        <MDTypography variant="button" color="text" fontWeight="medium">
-          {offer.price} грн
-        </MDTypography>
-      ),
-      duration: (
-        <MDTypography variant="button" color="text" fontWeight="medium">
-          {secondsToDuration(offer.duration)}
+        <MDTypography variant="button">
+          {Number(offer.price).toFixed(0)} ₴
         </MDTypography>
       ),
       action: (

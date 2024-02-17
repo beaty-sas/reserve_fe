@@ -37,11 +37,10 @@ function Booking() {
           onClick={() => navigate(`/booking/${params.id}/confirm`, { state: { selectedOffers } })}
           state={selectedOffers}
           rel="noreferrer"
-          variant="outlined"
           size="large"
           color={"info"}
         >
-          {"Далі"}
+          {"Продовжити"}
         </MDButton>
       </Header>
     </PageLayout>

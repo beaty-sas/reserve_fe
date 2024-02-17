@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import AppBar from "@mui/material/AppBar";
 import PlaceIcon from '@mui/icons-material/Place';
 import breakpoints from "../../assets/theme/base/breakpoints";
 import MDBox from "../../components/MDBox";
@@ -39,26 +38,22 @@ function Header({ children, business }: Props) {
                     px: 2,
                 }}
             >
-                <Grid container spacing={3} alignItems="center">
-                    {business.logo?.thumbnail && (
-                        <Grid item>
-                            <MDAvatar src={business.logo?.thumbnail} alt="profile-image" size="xl" shadow="sm" />
-                        </Grid>
-                    )}
-                    <Grid item>
-                        <MDBox height="100%" mt={0.5} lineHeight={1}>
-                            <MDTypography variant="h5" fontWeight="medium">
-                                {business.display_name}
-                            </MDTypography>
-                        </MDBox>
+                {business.logo?.thumbnail && (
+                    <Grid container justifyContent={'center'}>
+                        <MDAvatar src={business.logo?.thumbnail} alt="profile-image" size="xxl" shadow="sm" />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
-                        <AppBar position="static">
-                            <MDTypography variant="h5" color="text" fontWeight="regular" textAlign="end">
-                                {business.location?.name} <PlaceIcon />
-                            </MDTypography>
-                        </AppBar>
-                    </Grid>
+                )}
+                <Grid container mt={3} justifyContent="center">
+                    <MDBox lineHeight={1}>
+                        <MDTypography variant="h4" fontWeight="medium">
+                            {business.display_name}
+                        </MDTypography>
+                    </MDBox>
+                </Grid>
+                <Grid container mt={1} justifyContent="center">
+                    <MDTypography variant="h6" fontWeight="regular" textAlign="end">
+                        <PlaceIcon /> {business.location?.name}
+                    </MDTypography>
                 </Grid>
                 {children}
             </Card>

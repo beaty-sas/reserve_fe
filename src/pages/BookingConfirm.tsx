@@ -7,7 +7,7 @@ import { getAvailableHours, getBusiness } from "../services/bookingPage";
 import MDBox from "../components/MDBox";
 import { Grid } from "@mui/material";
 import MDInput from "../components/MDInput";
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import { DateCalendar, LocalizationProvider, ukUA } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from "react";
 import dayjs from 'dayjs';
@@ -63,24 +63,29 @@ function BookingConfirm() {
       <Header business={business}>
         <MDBox mt={5} mb={3}>
           <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              localeText={ukUA.components.MuiLocalizationProvider.defaultProps.localeText}
+            >
               <DateCalendar
                 onChange={(value) => setSelectedDate(dayjs(value).format('YYYY-MM-DD'))}
                 disablePast={true}
               />
             </LocalizationProvider>
-            {availableHours?.map(({ time }: AvailableTime) => (
-              <MDButton
-                key={time}
-                variant={'gradient'}
-                color={dayjs(time).format('HH:mm') === selectedTime ? "success" : "secondary"}
-                size={'small'}
-                style={{ marginRight: 5 }}
-                onClick={() => setSelectedTime(dayjs(time).format('HH:mm'))}
-              >
-                {dayjs(time).format('HH:mm')}
-              </MDButton>
-            ))}
+            <MDBox px={3}>
+              {availableHours?.map(({ time }: AvailableTime) => (
+                <MDButton
+                  key={time}
+                  variant={dayjs(time).format('HH:mm') === selectedTime ? 'gradient' : 'outlined'}
+                  color={dayjs(time).format('HH:mm') === selectedTime ? "success" : "info"}
+                  size={'small'}
+                  style={{ marginRight: 5, marginTop: 5 }}
+                  onClick={() => setSelectedTime(dayjs(time).format('HH:mm'))}
+                >
+                  {dayjs(time).format('HH:mm')}
+                </MDButton>
+              ))}
+            </MDBox>
             <MDBox pt={4} pb={3} px={3}>
               <MDBox component="form" role="form">
                 <MDBox mb={2}>
@@ -101,18 +106,18 @@ function BookingConfirm() {
                   />
                 </MDBox>
               </MDBox>
+              <MDButton
+                onClick={handleCreateOrder}
+                rel="noreferrer"
+                size="large"
+                color={"info"}
+                fullWidth={true}
+              >
+                {"Підтвердити"}
+              </MDButton>
             </MDBox>
           </Grid>
         </MDBox>
-        <MDButton
-          onClick={handleCreateOrder}
-          rel="noreferrer"
-          variant="outlined"
-          size="large"
-          color={"info"}
-        >
-          {"Підтвердити"}
-        </MDButton>
       </Header>
     </PageLayout>
   );

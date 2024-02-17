@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AvailableHoursRequest, AvailableTime, Business, BusinessOffer, CreateOrderRequest } from '../types/business';
-
-const BASE_URL = import.meta.env.VITE_BACKEND_URL ?? "http://127.0.0.1:4000"
+import { BASE_URL } from '../conf/constants';
 
 
 export const getBusiness = async (id: number): Promise<Business> => {
