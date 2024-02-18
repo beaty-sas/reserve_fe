@@ -4,7 +4,7 @@ import PageLayout from "../layouts/containers/page";
 import MDBox from "../components/MDBox";
 import { Grid } from "@mui/material";
 import MDTypography from "../components/MDTypography";
-import { BusinessOffer } from "../types/business";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 function BookingSuccess() {
@@ -12,17 +12,43 @@ function BookingSuccess() {
 
   return (
     <PageLayout>
-      <Header business={state.business}>
-        <MDBox mt={5} mb={3}>
-          <Grid item xs={12}>
-            <MDTypography>Ваша заявка прийнята.</MDTypography>
-            <MDTypography>Телефон: {state.business.phone_number}</MDTypography>
-            <MDTypography>Адреса: {state.business.location.name}</MDTypography>
-            <MDTypography>Дата: {state.selectedDate} Час: {state.selectedTime}</MDTypography>
-            <MDTypography>Вибрані послуги: {state.selectedOffers.map((offer: BusinessOffer) => offer.name).join(', ')} </MDTypography>
+      <MDBox
+        width="90vw"
+        sx={{ margin: 'auto', marginTop: 3 }}
+      >
+        <Header business={state.business}>
+          <Grid container justifyContent={'center'} alignItems={'center'} mt={3}>
+            <MDBox sx={{display: 'flex'}}>
+              <CheckCircleIcon color="success" fontSize="large"/>
+            </MDBox>
+            <MDTypography display="block" variant={'button'} ml={1}>Ваш візит заброньовано</MDTypography>
           </Grid>
-        </MDBox>
-      </Header>
+          <MDBox mt={2} mb={2}>
+            <Grid item xs={12}>
+              <Grid container justifyContent={'space-between'}>
+                <MDTypography variant={'button'} mt={2}>Час бронювання</MDTypography>
+                <MDTypography variant={'button'} mt={2} fontWeight="medium">{state.selectedDate} {state.selectedTime}</MDTypography>
+              </Grid>
+              <Grid container justifyContent={'space-between'}>
+                <MDTypography variant={'button'} mt={1}>Телефон</MDTypography>
+                <MDTypography variant={'button'} mt={1} fontWeight="medium">{state.business.phone_number}</MDTypography>
+              </Grid>
+              <Grid container justifyContent={'space-between'}>
+                <MDTypography variant={'button'} mt={1}>Назва</MDTypography>
+                <MDTypography variant={'button'} mt={1} fontWeight="medium">{state.business.display_name}</MDTypography>
+              </Grid>
+              {state.business.location && <Grid container justifyContent={'space-between'}>
+                <MDTypography variant={'button'} mt={1}>Адреса</MDTypography>
+                <MDTypography variant={'button'} mt={1} fontWeight="medium">{state.business.location.name}</MDTypography>
+              </Grid>}
+              <Grid container justifyContent={'space-between'}>
+                <MDTypography variant={'button'} mt={1}>Ціна</MDTypography>
+                <MDTypography variant={'button'} mt={1} fontWeight="medium">{state.selectedOffers.reduce((n: number, { duration }: { duration: number }) => n + duration, 0)} ₴</MDTypography>
+              </Grid>
+            </Grid>
+          </MDBox>
+        </Header>
+      </MDBox>
     </PageLayout>
   );
 }
