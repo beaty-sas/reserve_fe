@@ -8,22 +8,20 @@ import CardHeader from '@mui/material/CardHeader';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Box, Button, Card, Typography, useTheme } from '@mui/material';
 
-import { useGetBusiness } from 'src/api/business';
 import { useGetWorkingHours } from 'src/api/working-hours';
 
 
 // ----------------------------------------------------------------------
 
-export default function TimeSlotView({ id }: { id: number }) {
+export default function TimeSlotView({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
-  const { business } = useGetBusiness(id);
   const router = useRouter();
   const theme = useTheme();
 
   const [value, setValue] = useState<Date | null>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const formattedDate = value?.toISOString().split('T')[0];
-  const { workingHours } = useGetWorkingHours(id, formattedDate ?? '', 60);
+  const { workingHours } = useGetWorkingHours(slug, formattedDate ?? '', 60);
 
   const selectedOffers = searchParams.get('selected')?.split(',').map(Number);
 
@@ -37,11 +35,11 @@ export default function TimeSlotView({ id }: { id: number }) {
   ]
 
   const isTimeAvailable = (time: string) => {
-    return workingHours?.some((item) => item.time.split('T')[1] === `${time}:00`);
+    return workingHours?.some((item) => item.time === time);
   }
 
   function goNext() {
-    router.push(`/booking/${business.id}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}`);
+    router.push(`/booking/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}`);
   }
 
   return (

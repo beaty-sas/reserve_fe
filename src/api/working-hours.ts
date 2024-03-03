@@ -7,14 +7,14 @@ import { IWorkingHour } from 'src/types/working-hour';
 
 // ----------------------------------------------------------------------
 
-export function useGetWorkingHours(businessId: number, date: string, duration: number): {
+export function useGetWorkingHours(slug: string, date: string, duration: number): {
   workingHours: IWorkingHour[];
   workingHoursLoading: boolean;
   workingHoursError: any;
   workingHoursValidating: boolean;
   workingHoursEmpty: boolean;
 } {
-  const URL = endpoints.workingHours.list + `${businessId}/available?duration=${duration}&date=${date}`;
+  const URL = endpoints.workingHours.list + `${slug}/available?duration=${duration}&date=${date}`;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

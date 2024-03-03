@@ -8,14 +8,14 @@ export const metadata = {
 
 type Props = {
   params: {
-    id: string;
+    slug: string;
   };
 };
 
 export default function Page({ params }: Props) {
-  const { id } = params;
+  const { slug } = params;
 
-  return <UserInfoView id={Number(id)} />;
+  return <UserInfoView slug={slug} />;
 }
 
 

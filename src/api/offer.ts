@@ -7,14 +7,14 @@ import { endpoints, fetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function useGetOffers(businessId: number): {
+export function useGetOffers(slug: string): {
   offers: IOffer[];
   offersLoading: boolean;
   offersError: any;
   offersValidating: boolean;
   offersEmpty: boolean;
 } {
-  const URL = endpoints.business.list + `${businessId}/offers`;
+  const URL = endpoints.business.list + `${slug}/offers`;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

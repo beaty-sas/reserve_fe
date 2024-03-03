@@ -12,15 +12,15 @@ import { useGetOffers } from 'src/api/offer';
 
 type Props = {
   children: React.ReactNode;
-  params: { id: number };
+  params: { slug: string };
 };
 
 
 export default function BookingLayout({ children, params }: Props) {
   const theme = useTheme();
   const searchParams = useSearchParams();
-  const { business } = useGetBusiness(params.id);
-  const { offers } = useGetOffers(params.id);
+  const { business } = useGetBusiness(params.slug);
+  const { offers } = useGetOffers(params.slug);
 
   const selectedOffers = searchParams.get('selected')?.split(',').map(Number);
   const selectionOffersObj = offers.filter((offer) => selectedOffers?.includes(offer.id));

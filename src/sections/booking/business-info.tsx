@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useGetBusiness } from 'src/api/business';
 import { useGetOffers } from 'src/api/offer';
 import BookingDetails from 'src/overview/booking-details';
 import { IOffer } from 'src/types/offer';
@@ -11,9 +10,8 @@ import { IOffer } from 'src/types/offer';
 
 // ----------------------------------------------------------------------
 
-export default function BusinessInfoView({ id }: { id: number }) {
-  const { business } = useGetBusiness(id);
-  const { offers } = useGetOffers(id);
+export default function BusinessInfoView({ slug }: { slug: string }) {
+  const { offers } = useGetOffers(slug);
   const [selected, setSelected] = useState<IOffer[]>([]);
   const router = useRouter();
 
@@ -24,7 +22,7 @@ export default function BusinessInfoView({ id }: { id: number }) {
   function goNext() {
     const selectedIds = selected.map((item) => item.id).join(',');
     const duration = selected.reduce((acc, item) => acc + item.duration, 0);
-    router.push(`/booking/${business.id}/time-slot?selected=${selectedIds}&duration=${duration}`);
+    router.push(`/booking/${slug}/time-slot?selected=${selectedIds}&duration=${duration}`);
   }
 
   return (

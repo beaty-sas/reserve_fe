@@ -8,14 +8,14 @@ export const metadata = {
 
 type Props = {
   params: {
-    id: string;
+    slug: string;
   };
 };
 
 export default function Page({ params }: Props) {
-  const { id } = params;
+  const { slug } = params;
 
-  return <TimeSlot id={Number(id)} />;
+  return <TimeSlot slug={slug} />;
 }
 
 
