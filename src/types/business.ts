@@ -11,8 +11,10 @@ export type ILocation = {
 
 export type IBusiness = {
   id: number;
+  slug: string;
   display_name: string;
   phone_number: string;
   location?: ILocation | null;
   logo?: IAttachment | null;
+  banner?: IAttachment | null;
 };

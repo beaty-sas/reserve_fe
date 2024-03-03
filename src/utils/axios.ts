@@ -27,13 +27,13 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
 
 export const endpoints = {
   business: {
-    list: '/businesses/',
-    available: '/businesses/available',
+    list: '/api/businesses/',
+    available: '/api/businesses/available',
   },
   workingHours: {
-    list: '/working-hours/',
+    list: '/api/working-hours/',
   },
   booking: {
-    create: '/booking',
+    create: '/api/booking',
   }
 };

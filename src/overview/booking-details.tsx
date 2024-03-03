@@ -83,7 +83,9 @@ function BookingDetailsRow({ row, handleSelect, selected }: BookingDetailsRowPro
   const theme = useTheme();
 
   return (
-    <TableRow>
+    <TableRow onClick={() => {
+      handleSelect(row, !selected.includes(row))
+    }}>
 
       <TableCell sx={{ borderBottom: 'none', pr: 0, pb: 2, pt: 0 }}>
         <Box

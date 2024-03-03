@@ -15,9 +15,9 @@ import Image from 'src/components/image';
 import { useGetBusiness } from 'src/api/business';
 
 
-export default function BookingLayout({ children, params }: { children: React.ReactNode, params: { id: number } }) {
+export default function BookingLayout({ children, params }: { children: React.ReactNode, params: { slug: string } }) {
     const theme = useTheme();
-    const { business } = useGetBusiness(params.id);
+    const { business } = useGetBusiness(params.slug);
 
     return (
         <MuiLocalizationProvider
@@ -54,7 +54,7 @@ export default function BookingLayout({ children, params }: { children: React.Re
                         />
 
                         <Image
-                            src={business?.logo?.original}
+                            src={business?.banner?.original}
                             alt={business?.display_name}
                             ratio="6/4"
                             overlay={alpha(theme.palette.grey[900], 0.48)}

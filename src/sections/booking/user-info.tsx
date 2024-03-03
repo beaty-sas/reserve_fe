@@ -19,8 +19,8 @@ import { enqueueSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
-export default function UserInfoView({ id }: { id: number }) {
-  const { business } = useGetBusiness(id);
+export default function UserInfoView({ slug }: { slug: string }) {
+  const { business } = useGetBusiness(slug);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -47,8 +47,11 @@ export default function UserInfoView({ id }: { id: number }) {
   const { reset, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
+    let [hours, minutes] = (searchParams.get('time') ?? '').split(':');
+    hours = hours.padStart(2, '0')  
+    
     const bookingData: ICreateBooking = {
-      start_time: searchParams.get('date') + 'T' + searchParams.get('time'),
+      start_time: searchParams.get('date') + `T${hours}:${minutes}`,
       business_id: business.id,
       offers: searchParams.get('selected')?.split(',').map(Number) || [],
       user: {
@@ -60,7 +63,7 @@ export default function UserInfoView({ id }: { id: number }) {
     try {
       await createNewBooking(bookingData);
       reset();
-      router.push(`/booking/${business.id}/order/confirm?selected=${searchParams.get('selected')}&date=${searchParams.get('date')}&time=${searchParams.get('time')}&success=true`);
+      router.push(`/booking/${slug}/order/confirm?selected=${searchParams.get('selected')}&date=${searchParams.get('date')}&time=${searchParams.get('time')}&success=true`);
     } catch (error) {
       enqueueSnackbar(error, { variant: 'error' });
     }

@@ -7,14 +7,14 @@ import { IBusiness } from '../types/business';
 
 // ----------------------------------------------------------------------
 
-export function useGetBusiness(businessId: number): {
+export function useGetBusiness(slug: string): {
   business: IBusiness;
   businessLoading: boolean;
   businessError: any;
   businessValidating: boolean;
   businessEmpty: boolean;
 } {
-  const URL = endpoints.business.list + businessId;
+  const URL = endpoints.business.list + slug;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
