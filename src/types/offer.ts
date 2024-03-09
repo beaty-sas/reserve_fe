@@ -3,4 +3,5 @@ export type IOffer = {
   name: string;
   price: number;
   duration: number;
+  allow_photo: boolean;
 };

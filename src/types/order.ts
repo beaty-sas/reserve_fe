@@ -9,4 +9,6 @@ export type ICreateBooking = {
     business_id: number;
     offers: number[];
     user: IUser;
+    comment?: string;
+    attachments?: Array<number>;
 }

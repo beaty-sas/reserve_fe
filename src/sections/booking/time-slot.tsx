@@ -25,9 +25,9 @@ export default function TimeSlotView({ slug }: { slug: string }) {
 
   const selectedOffers = searchParams.get('selected')?.split(',').map(Number);
 
-  const morningTimes = ['8:00', '9:00', '10:00', '11:00', '12:00']
-  const lunchTimes = ['13:00', '14:00', '15:00', '16:00', '17:00']
-  const eveningTimes = ['18:00', '19:00', '20:00', '21:00']
+  const morningTimes = ['7:00', '8:00', '9:00', '10:00', '11:00']
+  const lunchTimes = ['12:00', '13:00', '14:00', '15:00', '16:00']
+  const eveningTimes = ['17:00', '18:00', '19:00', '20:00', '21:00']
   const availableTimes = [
     { title: 'Ранок', times: morningTimes },
     { title: 'День', times: lunchTimes },
@@ -39,7 +39,8 @@ export default function TimeSlotView({ slug }: { slug: string }) {
   }
 
   function goNext() {
-    router.push(`/booking/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}`);
+    const withPhoto = searchParams.get('withPhoto');
+    router.push(`/booking/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}&withPhoto=${withPhoto}`);
   }
 
   return (
@@ -83,37 +84,41 @@ export default function TimeSlotView({ slug }: { slug: string }) {
             backgroundColor: theme.palette.grey[200],
           }}
         >
-          <Typography variant="subtitle1" noWrap fontWeight={'bold'} mr={1}>
-            {time.title}
-          </Typography>
-          {time.times.map((time, index) => {
-            const isAvailable = isTimeAvailable(time);
+          <Box flex={1}>
+            <Typography variant="subtitle1" noWrap fontWeight={'bold'} mr={1}>
+              {time.title}
+            </Typography>
+          </Box>
+          <Box flex={4} display={'flex'}>
+            {time.times.map((time, index) => {
+              const isAvailable = isTimeAvailable(time);
 
-            return (
-              <Box
-                key={index}
-                sx={{
-                  ml: 1,
-                  borderWidth: 1,
-                  border: isAvailable ? 1 : 0,
-                  borderRadius: '50%',
-                  borderColor: theme.palette.grey[400],
-                  width: 38,
-                  height: 38,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  display: 'flex',
-                  opacity: isAvailable ? 1 : 0.3,
-                  backgroundColor: selectedTime === time ? theme.palette.primary.main : theme.palette.grey[200],
-                }}
-                onClick={() => isAvailable ? setSelectedTime(time) : null}
-              >
-                <Typography variant="caption" noWrap fontWeight={'600'}>
-                  {time}
-                </Typography>
-              </Box>
-            )
-          })}
+              return (
+                <Box
+                  key={index}
+                  sx={{
+                    ml: 1,
+                    borderWidth: 1,
+                    border: isAvailable ? 1 : 0,
+                    borderRadius: '50%',
+                    borderColor: theme.palette.grey[400],
+                    width: 38,
+                    height: 38,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    display: 'flex',
+                    opacity: isAvailable ? 1 : 0.3,
+                    backgroundColor: selectedTime === time ? theme.palette.primary.main : theme.palette.grey[200],
+                  }}
+                  onClick={() => isAvailable ? setSelectedTime(time) : null}
+                >
+                  <Typography variant="caption" noWrap fontWeight={'600'} textAlign={'center'}>
+                    {time}
+                  </Typography>
+                </Box>
+              )
+            })}
+          </Box>
         </Box>
       ))}
 

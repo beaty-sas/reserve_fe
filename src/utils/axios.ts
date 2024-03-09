@@ -35,5 +35,6 @@ export const endpoints = {
   },
   booking: {
     create: '/api/booking',
-  }
+  },
+  attachements: '/api/attachments',
 };
