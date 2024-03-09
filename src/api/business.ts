@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 import { IBusiness } from '../types/business';
 
 
@@ -30,6 +30,15 @@ export function useGetBusiness(slug: string): {
   );
 
   return memoizedValue;
+}
+
+// ----------------------------------------------------------------------
+
+export async function makeNewAttachment(file: any) {
+  const URL = endpoints.attachements;
+
+  const response = await axiosInstance.post(URL, { attachment: file }, { headers: { 'Content-Type': 'multipart/form-data' } });
+  return response.data;
 }
 
 // ----------------------------------------------------------------------
