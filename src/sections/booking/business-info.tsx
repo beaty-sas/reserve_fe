@@ -23,7 +23,7 @@ export default function BusinessInfoView({ slug }: { slug: string }) {
     const selectedIds = selected.map((item) => item.id).join(',');
     const duration = selected.reduce((acc, item) => acc + item.duration, 0);
     const withPhoto = selected.some((item) => item.allow_photo) ? 'true' : 'false';
-    router.push(`/booking/${slug}/time-slot?selected=${selectedIds}&duration=${duration}&withPhoto=${withPhoto}`);
+    router.push(`/link/${slug}/time-slot?selected=${selectedIds}&duration=${duration}&withPhoto=${withPhoto}`);
   }
 
   return (

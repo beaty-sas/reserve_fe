@@ -59,11 +59,13 @@ export default function UserInfoView({ slug }: { slug: string }) {
   const { reset, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    let [hours, minutes] = (searchParams.get('time') ?? '').split(':');
-    hours = hours.padStart(2, '0')
+    const [hours, _] = (searchParams.get('time') ?? '').split(':');
+    const localTime = new Date();
+    localTime.setHours(Number(hours));
+    const startTime = localTime.getUTCHours();
 
     const bookingData: ICreateBooking = {
-      start_time: searchParams.get('date') + `T${hours}:${minutes}`,
+      start_time: searchParams.get('date') + `T${String(startTime).length == 1 ? '0' + String(startTime) : String(startTime)}:00`,
       business_id: business.id,
       offers: searchParams.get('selected')?.split(',').map(Number) || [],
       user: {
@@ -77,9 +79,9 @@ export default function UserInfoView({ slug }: { slug: string }) {
     try {
       await createNewBooking(bookingData);
       reset();
-      router.push(`/booking/${slug}/order/confirm?selected=${searchParams.get('selected')}&date=${searchParams.get('date')}&time=${searchParams.get('time')}&success=true`);
+      router.push(`/link/${slug}/order/confirm?selected=${searchParams.get('selected')}&date=${searchParams.get('date')}&time=${searchParams.get('time')}&success=true`);
     } catch (error) {
-      enqueueSnackbar(error, { variant: 'error' });
+      enqueueSnackbar(error.detail[0].msg, { variant: 'error' });
     }
   });
 

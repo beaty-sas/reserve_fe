@@ -122,7 +122,6 @@ function BookingDetailsRow({ row, handleSelect, selected }: BookingDetailsRowPro
         >
           <Checkbox
             size='medium'
-            onChange={(event, checked) => handleSelect(row, checked)}
             checked={selected.includes(row)}
           />
         </Box>

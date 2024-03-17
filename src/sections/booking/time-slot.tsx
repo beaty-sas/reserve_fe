@@ -21,7 +21,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
   const [value, setValue] = useState<Date | null>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const formattedDate = value?.toISOString().split('T')[0];
-  const { workingHours } = useGetWorkingHours(slug, formattedDate ?? '', 60);
+  const { workingHours } = useGetWorkingHours(slug, formattedDate ?? '', Number(searchParams.get('duration')) ?? 3600);
 
   const selectedOffers = searchParams.get('selected')?.split(',').map(Number);
 
@@ -35,12 +35,20 @@ export default function TimeSlotView({ slug }: { slug: string }) {
   ]
 
   const isTimeAvailable = (time: string) => {
-    return workingHours?.some((item) => item.time === time);
+    return workingHours?.some((item) => {
+      // Convert local time to UTC
+      const localTime = new Date();
+      const [hours, _] = item.time.split(':').map(Number);
+      localTime.setUTCHours(hours);
+
+      // Compare UTC times
+      return time === localTime.getHours() + ':00';
+    });;
   }
 
   function goNext() {
     const withPhoto = searchParams.get('withPhoto');
-    router.push(`/booking/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}&withPhoto=${withPhoto}`);
+    router.push(`/link/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}&withPhoto=${withPhoto}`);
   }
 
   return (
