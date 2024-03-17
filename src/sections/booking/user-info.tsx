@@ -84,12 +84,12 @@ export default function UserInfoView({ slug }: { slug: string }) {
       enqueueSnackbar(error.detail[0].msg, { variant: 'error' });
     }
   });
-
+  
   const handleDropMultiFile = useCallback(
     async (acceptedFiles: File[]) => {
       for (const file of acceptedFiles) {
         const attachment = await makeNewAttachment(file);
-        setAttachments([...attachments, { preview: URL.createObjectURL(file), attachment: attachment }]);
+        setAttachments((prev) => [...prev, { preview: URL.createObjectURL(file), attachment: attachment }]);
       }
 
       setFiles([
