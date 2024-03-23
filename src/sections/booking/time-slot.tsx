@@ -137,6 +137,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
           fullWidth
           variant='contained'
           onClick={goNext}
+          disabled={!selectedTime}
         >
           Підтвердити
         </Button>

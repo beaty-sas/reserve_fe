@@ -38,7 +38,6 @@ export default function BookingDetails({
   ...other
 }: Props) {
 
-
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} titleTypographyProps={{ align: 'center' }} />
@@ -63,6 +62,7 @@ export default function BookingDetails({
           fullWidth
           variant='contained'
           onClick={handleNext}
+          disabled={selected.length === 0}
         >
           Продовжити
         </Button>
@@ -82,6 +82,10 @@ type BookingDetailsRowProps = {
 function BookingDetailsRow({ row, handleSelect, selected }: BookingDetailsRowProps) {
   const theme = useTheme();
 
+  const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
+  const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+
+
   return (
     <TableRow onClick={() => {
       handleSelect(row, !selected.includes(row))
@@ -89,9 +93,11 @@ function BookingDetailsRow({ row, handleSelect, selected }: BookingDetailsRowPro
 
       <TableCell sx={{ borderBottom: 'none', pr: 0, pb: 2, pt: 0 }}>
         <Box
+          pt={mobile ? 1 : 0}
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            flexDirection: mobile ? 'column' : 'row',
+            alignItems: mobile ? 'flex-start' : 'center',
             minHeight: 60,
             pl: 2,
             borderRadius: '10px 0 0 10px',
@@ -100,12 +106,14 @@ function BookingDetailsRow({ row, handleSelect, selected }: BookingDetailsRowPro
           <Typography variant='subtitle1' noWrap fontWeight={'bold'}>
             {row.name}
           </Typography>
-          <Typography variant='caption' noWrap sx={{ ml: 3 }}>
-            {row.price} ₴
-          </Typography>
-          <Typography variant='caption' noWrap sx={{ ml: 3 }} color={'text.secondary'}>
-            {`${Math.round(row.duration / 60)} хв`}
-          </Typography>
+          <Box>
+            <Typography variant='caption' noWrap sx={{ ml: mobile ? 0 : 3 }}>
+              {row.price} ₴
+            </Typography>
+            <Typography variant='caption' noWrap sx={{ ml: 3 }} color={'text.secondary'}>
+              {`${Math.round(row.duration / 60)} хв`}
+            </Typography>
+          </Box>
         </Box>
       </TableCell>
 

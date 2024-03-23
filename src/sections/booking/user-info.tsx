@@ -122,7 +122,6 @@ export default function UserInfoView({ slug }: { slug: string }) {
           files={files}
           onDrop={handleDropMultiFile}
           onRemove={handleRemoveFile}
-          onUpload={() => console.info('ON UPLOAD')}
         />}
       </Stack>
 
