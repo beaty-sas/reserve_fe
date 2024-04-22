@@ -1,4 +1,5 @@
 
+import { Card, Grid } from "@mui/material";
 import TimeSlot from "src/sections/booking/time-slot";
 import axiosInstance, { endpoints } from "src/utils/axios";
 
@@ -15,12 +16,18 @@ type Props = {
 export default function Page({ params }: Props) {
   const { slug } = params;
 
-  return <TimeSlot slug={slug} />;
+  return (
+    <Grid xs={12} md={6}>
+      <Card sx={{ ml: { md: 2 } }}>
+        <TimeSlot slug={slug} />
+      </Card>
+    </Grid>
+  );
 }
 
 
 export async function generateStaticParams() {
   const res = await axiosInstance.get(endpoints.business.available);
-  
+
   return res.data;
 }

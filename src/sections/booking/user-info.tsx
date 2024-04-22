@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Card, CardHeader, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
 import { makeNewAttachment, useGetBusiness } from 'src/api/business';
@@ -17,6 +17,7 @@ import { createNewBooking } from 'src/api/booking';
 import { enqueueSnackbar } from 'src/components/snackbar';
 import { Upload } from 'src/components/upload';
 import { IAttachment } from 'src/types/business';
+import Iconify from 'src/components/iconify';
 
 
 type AttachemtnFile = {
@@ -31,7 +32,7 @@ export default function UserInfoView({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [files, setFiles] = useState<(File | string)[]>([]);
-  const withPhoto = searchParams.get('withPhoto')
+  const withPhoto = searchParams.get('withPhoto') == 'true'
   const [attachments, setAttachments] = useState<Array<AttachemtnFile>>([]);
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -84,7 +85,7 @@ export default function UserInfoView({ slug }: { slug: string }) {
       enqueueSnackbar(error.detail[0].msg, { variant: 'error' });
     }
   });
-  
+
   const handleDropMultiFile = useCallback(
     async (acceptedFiles: File[]) => {
       for (const file of acceptedFiles) {
@@ -110,32 +111,58 @@ export default function UserInfoView({ slug }: { slug: string }) {
     setAttachments(attachments.filter((item) => item.preview !== inputFile));
   };
 
-  return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={3} sx={{ p: 3 }}>
-        <RHFTextField name="name" label="Ім'я" required />
-        <RHFTextField name="phone" label="Телефон" required />
-        <RHFTextField name="comment" label="Коментар" multiline />
-        {withPhoto && <Upload
-          multiple
-          thumbnail
-          files={files}
-          onDrop={handleDropMultiFile}
-          onRemove={handleRemoveFile}
-        />}
-      </Stack>
+  const goBack = () => {
+    router.back();
+  }
 
-      <Box sx={{ p: 2 }}>
-        <Button
-          size="large"
-          type="submit"
-          color="inherit"
-          fullWidth
-          variant='contained'
-        >
-          Записатися
-        </Button>
-      </Box>
-    </FormProvider>
+  return (
+    <Card>
+      <CardHeader title={'Ваші дані'} sx={{ mb: 3 }} titleTypographyProps={{ variant: 'h2' }} />
+
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Stack spacing={2} sx={{ p: 3 }}>
+          <RHFTextField name="name" label="Ім'я" required />
+          <RHFTextField name="phone" label="Номер телефону" required />
+          <RHFTextField name="comment" label="Коментар до запису" multiline minRows={3} />
+
+          {withPhoto && <Typography variant="h6">
+            Завантажте фото за необхідності
+          </Typography>}
+
+          {withPhoto && <Upload
+            multiple
+            thumbnail
+            files={files}
+            onDrop={handleDropMultiFile}
+            onRemove={handleRemoveFile}
+          />}
+        </Stack>
+
+        <Box sx={{ p: 2, m: 1 }} display={'flex'}>
+          <Button
+            sx={{ flex: 1, mr: 2 }}
+            size="large"
+            color="primary"
+            startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={18} sx={{ ml: -0.5 }} />}
+            fullWidth
+            variant='outlined'
+            onClick={goBack}
+          >
+            Назад
+          </Button>
+          <Button
+            sx={{ flex: 4 }}
+            size="large"
+            color="primary"
+            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
+            fullWidth
+            type="submit"
+            variant='contained'
+          >
+            Продовжити
+          </Button>
+        </Box>
+      </FormProvider>
+    </Card>
   );
 }

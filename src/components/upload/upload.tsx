@@ -49,7 +49,7 @@ export default function Upload({
     <Stack spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap">
       <UploadIllustration sx={{ width: 1, maxWidth: 200 }} />
       <Stack spacing={1} sx={{ textAlign: 'center' }}>
-        <Typography variant="h6">Тут ви можете додати фото</Typography>
+        <Typography variant="h6">Виберіть файл</Typography>
       </Stack>
     </Stack>
   );

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useGetOffers } from 'src/api/offer';
-import BookingDetails from 'src/overview/booking-details';
+import BookingDetails from 'src/overview/BookingDetails';
 import { IOffer } from 'src/types/offer';
 
 

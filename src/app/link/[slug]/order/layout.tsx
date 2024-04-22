@@ -26,6 +26,8 @@ export default function BookingLayout({ children, params }: Props) {
   const selectionOffersObj = offers.filter((offer) => selectedOffers?.includes(offer.id));
   const isSuccess = searchParams.get('success');
 
+  return (<>{children}</>)
+
   return (
     <Card>
       {isSuccess && <Box

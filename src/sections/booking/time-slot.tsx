@@ -2,13 +2,17 @@
 
 import isPast from 'date-fns/isPast';
 import { useState } from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import uk from 'date-fns/locale/uk';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import CardHeader from '@mui/material/CardHeader';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Box, Button, Card, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, Tooltip, Typography, useTheme } from '@mui/material';
 
 import { useGetWorkingHours } from 'src/api/working-hours';
+import Iconify from 'src/components/iconify';
 
 
 // ----------------------------------------------------------------------
@@ -51,53 +55,59 @@ export default function TimeSlotView({ slug }: { slug: string }) {
     router.push(`/link/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}&withPhoto=${withPhoto}`);
   }
 
+  function goBack() {
+    router.back();
+  }
+
   return (
     <Card>
       <CardHeader
         title={'Запис'}
-        sx={{ mb: 2 }}
-        titleTypographyProps={{ align: 'center' }}
+        sx={{ mb: 3 }}
+        titleTypographyProps={{ variant: 'h2' }}
       />
 
-      <Typography variant="subtitle1" sx={{ mb: 1 }} align='center'>
-        Дата
+      <Typography variant="h6" sx={{ mb: 1, ml: 3 }}>
+        Оберіть дату
       </Typography>
-      <DateCalendar<Date>
-        openTo="day"
-        value={value}
-        disablePast={Boolean(isPast)}
-        onChange={(newValue) => {
-          setValue(newValue);
-        }}
-      />
+      <Card sx={{ ml: 3, mr: 3, pt: 2 }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={uk}>
+          <DateCalendar<Date>
+            openTo="day"
+            value={value}
+            disablePast={Boolean(isPast)}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            sx={{ textTransform: 'capitalize' }}
+          />
+        </LocalizationProvider>
+      </Card>
 
-      <Typography variant="subtitle1" sx={{ mb: 1 }} align='center'>
-        Час
+      <Typography variant="h6" sx={{ mb: 1, ml: 3, mt: 2 }}>
+        Оберіть час
       </Typography>
 
       {availableTimes.map((time, index) => (
-        <Box
+        <Card
           key={index}
           sx={{
-            ml: 'auto',
-            mr: 'auto',
+            ml: 3,
+            mr: 3,
             mb: 2,
-            maxWidth: 320,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'start',
             minHeight: 60,
             pl: 2,
-            borderRadius: '16px',
-            backgroundColor: theme.palette.grey[200],
           }}
         >
-          <Box flex={1}>
-            <Typography variant="subtitle1" noWrap fontWeight={'bold'} mr={1}>
+          <Box flex={3}>
+            <Typography variant="body1" noWrap>
               {time.title}
             </Typography>
           </Box>
-          <Box flex={4} display={'flex'}>
+          <Box flex={8} display={'flex'}>
             {time.times.map((time, index) => {
               const isAvailable = isTimeAvailable(time);
 
@@ -108,38 +118,59 @@ export default function TimeSlotView({ slug }: { slug: string }) {
                     ml: 1,
                     borderWidth: 1,
                     border: isAvailable ? 1 : 0,
-                    borderRadius: '50%',
-                    borderColor: theme.palette.grey[400],
-                    width: 38,
-                    height: 38,
+                    borderColor: theme.palette.primary.main,
+                    borderRadius: 1,
+                    width: 50,
+                    height: 30,
                     alignItems: 'center',
                     justifyContent: 'center',
                     display: 'flex',
+                    cursor: isAvailable ? 'pointer' : 'not-allowed',
                     opacity: isAvailable ? 1 : 0.3,
-                    backgroundColor: selectedTime === time ? theme.palette.primary.main : theme.palette.grey[200],
+                    backgroundColor: selectedTime === time ? theme.palette.primary.main : null,
                   }}
                   onClick={() => isAvailable ? setSelectedTime(time) : null}
                 >
-                  <Typography variant="caption" noWrap fontWeight={'600'} textAlign={'center'}>
-                    {time}
-                  </Typography>
+                  <Tooltip title={isAvailable ? '' : 'Заброньовано'}>
+                    <Typography
+                      variant="caption"
+                      noWrap
+                      textAlign={'center'}
+                      color={selectedTime === time ? 'white' : 'text.primary'}
+                    >
+                      {time}
+                    </Typography>
+                  </Tooltip>
                 </Box>
               )
             })}
           </Box>
-        </Box>
+        </Card>
       ))}
 
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, textAlign: 'right', m: 1 }} display={'flex'}>
         <Button
+          sx={{ flex: 1, mr: 2 }}
           size="large"
-          color="inherit"
+          color="primary"
+          startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={18} sx={{ ml: -0.5 }} />}
+          fullWidth
+          variant='outlined'
+          onClick={goBack}
+        >
+          Назад
+        </Button>
+        <Button
+          sx={{ flex: 4 }}
+          size="large"
+          color="primary"
+          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
           fullWidth
           variant='contained'
           onClick={goNext}
           disabled={!selectedTime}
         >
-          Підтвердити
+          Продовжити
         </Button>
       </Box>
     </Card>

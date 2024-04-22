@@ -12,6 +12,7 @@ import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import { SnackbarProvider } from 'src/components/snackbar';
+import { Container } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,9 @@ export default function RootLayout({ children }: Props) {
               <MotionLazy>
                 <SettingsDrawer />
                 <ProgressBar />
-                {children}
+                <Container maxWidth={'xl'}>
+                  {children}
+                </Container>
               </MotionLazy>
             </SnackbarProvider>
           </ThemeProvider>

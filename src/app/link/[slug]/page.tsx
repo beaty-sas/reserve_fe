@@ -1,4 +1,5 @@
 
+import { Card, Grid } from "@mui/material";
 import BusinessInfoView from "src/sections/booking/business-info";
 import axiosInstance, { endpoints } from "src/utils/axios";
 
@@ -14,13 +15,19 @@ type Props = {
 
 export default function Page({ params }: Props) {
   const { slug } = params;
-  
-  return <BusinessInfoView slug={slug} />;
+
+  return (
+    <Grid xs={12} md={6}>
+      <Card sx={{ ml: { md: 2 } }}>
+        <BusinessInfoView slug={slug} />
+      </Card>
+    </Grid>
+  );
 }
 
 
 export async function generateStaticParams() {
   const res = await axiosInstance.get(endpoints.business.available);
-  
+
   return res.data;
 }
