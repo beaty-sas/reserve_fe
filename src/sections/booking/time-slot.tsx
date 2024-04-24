@@ -6,28 +6,24 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import uk from 'date-fns/locale/uk';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import CardHeader from '@mui/material/CardHeader';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Box, Button, Card, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Card, Tooltip, Typography, useTheme } from '@mui/material';
 
 import { useGetWorkingHours } from 'src/api/working-hours';
-import Iconify from 'src/components/iconify';
+import { useSharedState } from 'src/hooks/state';
 
 
 // ----------------------------------------------------------------------
 
 export default function TimeSlotView({ slug }: { slug: string }) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const theme = useTheme();
-
+  const { setSelectedDate, setSelectedTime, selectedTime, selectedOffers } = useSharedState();
   const [value, setValue] = useState<Date | null>(new Date());
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const formattedDate = value?.toISOString().split('T')[0];
-  const { workingHours } = useGetWorkingHours(slug, formattedDate ?? '', Number(searchParams.get('duration')) ?? 3600);
 
-  const selectedOffers = searchParams.get('selected')?.split(',').map(Number);
+  const formattedDate = value?.toISOString().split('T')[0];
+  const offersDuration = selectedOffers.reduce((acc, offer) => acc + offer.duration, 0);
+  const { workingHours } = useGetWorkingHours(slug, formattedDate ?? '', offersDuration ?? 3600);
 
   const morningTimes = ['7:00', '8:00', '9:00', '10:00', '11:00']
   const lunchTimes = ['12:00', '13:00', '14:00', '15:00', '16:00']
@@ -50,15 +46,6 @@ export default function TimeSlotView({ slug }: { slug: string }) {
     });;
   }
 
-  function goNext() {
-    const withPhoto = searchParams.get('withPhoto');
-    router.push(`/link/${slug}/order/user-info?selected=${selectedOffers}&date=${formattedDate}&time=${selectedTime}&withPhoto=${withPhoto}`);
-  }
-
-  function goBack() {
-    router.back();
-  }
-
   return (
     <Card>
       <CardHeader
@@ -77,6 +64,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
             value={value}
             disablePast={Boolean(isPast)}
             onChange={(newValue) => {
+              setSelectedDate(newValue);
               setValue(newValue);
             }}
             sx={{ textTransform: 'capitalize' }}
@@ -102,7 +90,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
             pl: 2,
           }}
         >
-          <Box flex={3}>
+          <Box flex={2}>
             <Typography variant="body1" noWrap>
               {time.title}
             </Typography>
@@ -120,7 +108,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
                     border: isAvailable ? 1 : 0,
                     borderColor: theme.palette.primary.main,
                     borderRadius: 1,
-                    width: 50,
+                    width: 45,
                     height: 30,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -147,32 +135,6 @@ export default function TimeSlotView({ slug }: { slug: string }) {
           </Box>
         </Card>
       ))}
-
-      <Box sx={{ p: 2, textAlign: 'right', m: 1 }} display={'flex'}>
-        <Button
-          sx={{ flex: 1, mr: 2 }}
-          size="large"
-          color="primary"
-          startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={18} sx={{ ml: -0.5 }} />}
-          fullWidth
-          variant='outlined'
-          onClick={goBack}
-        >
-          Назад
-        </Button>
-        <Button
-          sx={{ flex: 4 }}
-          size="large"
-          color="primary"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-          fullWidth
-          variant='contained'
-          onClick={goNext}
-          disabled={!selectedTime}
-        >
-          Продовжити
-        </Button>
-      </Box>
     </Card>
   );
 }

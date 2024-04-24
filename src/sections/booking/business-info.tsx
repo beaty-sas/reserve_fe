@@ -1,38 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { useGetOffers } from 'src/api/offer';
 import BookingDetails from 'src/overview/BookingDetails';
 import { IOffer } from 'src/types/offer';
+import { useSharedState } from 'src/hooks/state';
 
 
 // ----------------------------------------------------------------------
 
 export default function BusinessInfoView({ slug }: { slug: string }) {
   const { offers } = useGetOffers(slug);
-  const [selected, setSelected] = useState<IOffer[]>([]);
-  const router = useRouter();
+  const { setSelectedOffers, selectedOffers } = useSharedState();
 
-  function handleSelect(offer: IOffer, selected: boolean) {
-    setSelected((prev) => (selected ? [...prev, offer] : prev.filter((item: IOffer) => item !== offer)));
-  }
-
-  function goNext() {
-    const selectedIds = selected.map((item) => item.id).join(',');
-    const duration = selected.reduce((acc, item) => acc + item.duration, 0);
-    const withPhoto = selected.some((item) => item.allow_photo) ? 'true' : 'false';
-    router.push(`/link/${slug}/time-slot?selected=${selectedIds}&duration=${duration}&withPhoto=${withPhoto}`);
+  function handleSelect(offer: IOffer, isSelected: boolean) {
+    setSelectedOffers(isSelected ? [...selectedOffers, offer] : selectedOffers.filter((item: IOffer) => item.id !== offer.id));
   }
 
   return (
     <BookingDetails
       title="Послуги"
       tableData={offers}
-      selected={selected}
+      selected={selectedOffers}
       handleSelect={handleSelect}
-      handleNext={goNext}
     />
   );
 }

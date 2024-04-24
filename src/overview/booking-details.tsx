@@ -13,7 +13,6 @@ export interface Props extends CardProps {
   subheader?: string;
   tableData: IOffer[];
   selected: IOffer[];
-  handleNext: () => void;
   handleSelect: (row: IOffer, selected: boolean) => void;
 }
 

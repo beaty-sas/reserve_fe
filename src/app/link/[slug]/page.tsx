@@ -1,5 +1,4 @@
 
-import { Card, Grid } from "@mui/material";
 import BusinessInfoView from "src/sections/booking/business-info";
 import axiosInstance, { endpoints } from "src/utils/axios";
 
@@ -17,11 +16,7 @@ export default function Page({ params }: Props) {
   const { slug } = params;
 
   return (
-    <Grid xs={12} md={6}>
-      <Card sx={{ ml: { md: 2 } }}>
-        <BusinessInfoView slug={slug} />
-      </Card>
-    </Grid>
+    <BusinessInfoView slug={slug} />
   );
 }
 
