@@ -44,7 +44,6 @@ export default function BookingLayout({ children, info, summary, steps, params }
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          textAlign: 'center',
         }}
         justifyContent={'space-between'}
       >
@@ -61,7 +60,7 @@ export default function BookingLayout({ children, info, summary, steps, params }
           </Grid>
         </Grid>
 
-        <Box>
+        <Box pt={2}>
           {!isMobile ? steps : null}
           <Grid container alignItems={'center'} justifyContent={'center'} pb={2}>
             <Typography variant="subtitle1" color={theme.palette.grey[400]} mr={1}>
