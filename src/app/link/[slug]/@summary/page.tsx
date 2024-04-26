@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Divider, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useSharedState } from "src/hooks/state";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -15,9 +15,9 @@ type Props = {
 export default function SummaryPage({ params }: Props) {
   const { selectedOffers } = useSharedState();
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
-  const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
 
   const goNext = useCallback(() => {
     router.push(`/link/${params.slug}/time-slot`);
@@ -58,7 +58,7 @@ export default function SummaryPage({ params }: Props) {
 
       <Divider sx={{ mt: 3, mb: 3, mr: 2, borderStyle: 'dashed' }} />
 
-      {mobile
+      {isMobile
         ? <Stack
           sx={{
             position: 'fixed',

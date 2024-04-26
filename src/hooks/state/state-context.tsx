@@ -1,7 +1,14 @@
 'use client';
 
 import { createContext, useContext } from "react";
+import { IAttachment } from "src/types/business";
 import { IOffer } from "src/types/offer";
+
+
+export type AttachemtnFile = {
+  preview: string;
+  attachment: IAttachment;
+}
 
 type SharedStateType = {
   selectedOffers: IOffer[];
@@ -10,6 +17,14 @@ type SharedStateType = {
   setSelectedTime: (time: string) => void;
   selectedDate: string;
   setSelectedDate: (date: string) => void;
+  setUserName: (name: string) => void;
+  userName: string;
+  setUserPhone: (phone: string) => void;
+  userPhone: string;
+  setComment: (comment: string) => void;
+  comment: string;
+  setAttachments: (attachments: AttachemtnFile[]) => void;
+  attachments: AttachemtnFile[];
 };
 
 export const SharedStateContext = createContext({} as SharedStateType);

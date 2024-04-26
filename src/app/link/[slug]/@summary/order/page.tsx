@@ -9,6 +9,9 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import { useSharedState } from "src/hooks/state";
 import { useGetBusiness } from "src/api/business";
+import { ICreateBooking } from "src/types/order";
+import { createNewBooking } from "src/api/booking";
+import { enqueueSnackbar } from "notistack";
 
 
 type Props = {
@@ -18,15 +21,38 @@ type Props = {
 };
 
 export default function SummaryPage({ params }: Props) {
-  const { selectedOffers, selectedDate, selectedTime } = useSharedState();
+  const { selectedOffers, selectedDate, selectedTime, userName, userPhone, comment, attachments } = useSharedState();
   const { business } = useGetBusiness(params.slug);
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const goNext = useCallback(() => {
-    router.push(`/link/${params.slug}/order`);
-  }, [params.slug])
+  const goNext = useCallback(async () => {
+    const myDate = new Date(selectedDate);
+    myDate.setHours(Number(selectedTime.split(':')[0]));
+    myDate.setMinutes(0);
+    myDate.setSeconds(0);
+
+    const bookingData: ICreateBooking = {
+      start_time: myDate.toISOString(),
+      business_id: business.id,
+      offers: selectedOffers?.map((offer) => offer.id),
+      user: {
+        display_name: userName,
+        phone_number: userPhone,
+      },
+      comment: comment,
+      attachments: attachments.map((item) => item.attachment.id),
+    } as ICreateBooking;
+
+    try {
+      await createNewBooking(bookingData);
+      router.push(`/link/${params.slug}/confirm`);
+    } catch (error) {
+      enqueueSnackbar(error.detail[0].msg, { variant: 'error' });
+    }
+  }, [selectedTime, selectedDate, selectedOffers, business, userName, userPhone, comment, attachments, params.slug, router]);
+
 
   return (
     <Box>

@@ -10,7 +10,7 @@ import { primaryFont } from 'src/theme/typography';
 
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
-import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
+import { SettingsProvider } from 'src/components/settings';
 import { SnackbarProvider } from 'src/components/snackbar';
 import { Container } from '@mui/material';
 import { SharedStateProvider } from 'src/hooks/state';
@@ -59,7 +59,6 @@ export default function RootLayout({ children }: Props) {
             <SnackbarProvider>
               <MotionLazy>
                 <SharedStateProvider>
-                  <SettingsDrawer />
                   <ProgressBar />
                   <Container maxWidth={'xl'}>
                     {children}

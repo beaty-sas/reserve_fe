@@ -1,11 +1,10 @@
 'use client';
 
-import { Box, Button, Card, Divider, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { Box, Card, Divider, Typography } from "@mui/material";
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { useSharedState } from "src/hooks/state";
 import { useGetBusiness } from "src/api/business";
@@ -20,16 +19,15 @@ type Props = {
 export default function SummaryPage({ params }: Props) {
   const { selectedOffers, selectedDate, selectedTime } = useSharedState();
   const { business } = useGetBusiness(params.slug);
-  const router = useRouter();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const goNext = useCallback(() => {
-    router.push(`/link/${params.slug}/order`);
-  }, [params.slug])
 
   return (
     <Box>
+      <Box display={'flex'} alignItems={'center'} justifyContent={'center'} mb={2}>
+        <CheckCircleIcon fontSize='large' color='success' />
+        <Typography variant="h4" ml={2}>
+          Ви записалися!
+        </Typography>
+      </Box>
       <Card
         sx={{
           mr: { md: 2 },
@@ -85,43 +83,6 @@ export default function SummaryPage({ params }: Props) {
         ))}
       </Card>
 
-      <Divider sx={{ mt: 3, mb: 3, mr: 2, borderStyle: 'dashed' }} />
-
-      <Stack
-        sx={{
-          p: isMobile ? 2 : 0,
-          pr: 4,
-          pl: 2,
-          position: isMobile ? 'fixed' : 'relative',
-          width: isMobile ? '100%' : 'auto',
-          bottom: 1,
-          ml: isMobile ? -2 : 0,
-          zIndex: 100,
-          backgroundColor: 'background.paper',
-        }}
-        direction={'row'}
-      >
-        <Button
-          sx={{ flex: 1, mr: 2 }}
-          size="large"
-          color="primary"
-          fullWidth
-          variant='outlined'
-          onClick={() => router.back()}
-        >
-          Назад
-        </Button>
-        <Button
-          sx={{ flex: 11 }}
-          size="large"
-          color="primary"
-          fullWidth
-          variant='contained'
-          onClick={goNext}
-        >
-          Продовжити
-        </Button>
-      </Stack>
     </Box>
   );
 }
