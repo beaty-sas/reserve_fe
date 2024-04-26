@@ -6,17 +6,11 @@ export const metadata = {
   title: 'Reserve Expert',
 };
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
 
-export default function Page({ params }: Props) {
-  const { slug } = params;
+export default function Page() {
 
   return (
-    <UserInfoView slug={slug} />
+    <UserInfoView />
   );
 }
 
