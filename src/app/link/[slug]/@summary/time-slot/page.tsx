@@ -28,6 +28,47 @@ export default function SummaryPage({ params }: Props) {
     router.push(`/link/${params.slug}/order`);
   }, [params.slug])
 
+
+  if (isMobile) {
+    return (
+      <Stack
+        sx={{
+          p: 2,
+          pr: 4,
+          pl: 2,
+          position: 'fixed',
+          width: '100%',
+          bottom: 1,
+          ml: -2,
+          zIndex: 100,
+          backgroundColor: 'background.paper',
+        }}
+        direction={'row'}
+      >
+        <Button
+          sx={{ flex: 1, mr: 2 }}
+          size="large"
+          color="primary"
+          fullWidth
+          variant='outlined'
+          onClick={() => router.back()}
+        >
+          Назад
+        </Button>
+        <Button
+          sx={{ flex: 11 }}
+          size="large"
+          color="primary"
+          fullWidth
+          variant='contained'
+          onClick={goNext}
+        >
+          Продовжити
+        </Button>
+      </Stack>
+    )
+  }
+
   return (
     <Box>
       <Card
@@ -89,13 +130,9 @@ export default function SummaryPage({ params }: Props) {
 
       <Stack
         sx={{
-          p: isMobile ? 2 : 0,
           pr: 4,
           pl: 2,
-          position: isMobile ? 'fixed' : 'relative',
-          width: isMobile ? '100%' : 'auto',
           bottom: 1,
-          ml: isMobile ? -2 : 0,
           zIndex: 100,
           backgroundColor: 'background.paper',
         }}

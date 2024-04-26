@@ -50,7 +50,7 @@ export default function BookingLayout({ children, info, summary, steps, params }
         <Grid container sx={{ pt: 2 }} justifyContent={'space-between'}>
           <Grid xs={12} md={6} item>
             {info}
-            {selectedOffers.length && !isMobile ? summary : null}
+            {selectedOffers.length ? summary : null}
           </Grid>
 
           <Grid xs={12} md={6} item sx={{ mb: isMobile ? 12 : null }}>

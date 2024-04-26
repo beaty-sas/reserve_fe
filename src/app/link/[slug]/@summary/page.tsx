@@ -18,10 +18,35 @@ export default function SummaryPage({ params }: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-
   const goNext = useCallback(() => {
     router.push(`/link/${params.slug}/time-slot`);
   }, [selectedOffers, router, params.slug])
+
+  if (isMobile) {
+    return (
+      <Stack
+        sx={{
+          position: 'fixed',
+          width: '100%',
+          bottom: 1,
+          p: 2,
+          ml: -2,
+          zIndex: 100,
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <Button
+          size="large"
+          color="primary"
+          fullWidth
+          variant='contained'
+          onClick={goNext}
+        >
+          Продовжити
+        </Button>
+      </Stack>
+    )
+  }
 
   return (
     <Box>
@@ -58,39 +83,17 @@ export default function SummaryPage({ params }: Props) {
 
       <Divider sx={{ mt: 3, mb: 3, mr: 2, borderStyle: 'dashed' }} />
 
-      {isMobile
-        ? <Stack
-          sx={{
-            position: 'fixed',
-            width: '100%',
-            bottom: 1,
-            p: 2,
-            ml: -2,
-            zIndex: 100,
-            backgroundColor: 'background.paper',
-          }}
+      <Stack sx={{ pr: 4, pl: 2 }}>
+        <Button
+          size="large"
+          color="primary"
+          fullWidth
+          variant='contained'
+          onClick={goNext}
         >
-          <Button
-            size="large"
-            color="primary"
-            fullWidth
-            variant='contained'
-            onClick={goNext}
-          >
-            Продовжити
-          </Button>
-        </Stack>
-        : <Stack sx={{ pr: 4, pl: 2 }}>
-          <Button
-            size="large"
-            color="primary"
-            fullWidth
-            variant='contained'
-            onClick={goNext}
-          >
-            Продовжити
-          </Button>
-        </Stack>}
+          Продовжити
+        </Button>
+      </Stack>
     </Box>
   );
 }
