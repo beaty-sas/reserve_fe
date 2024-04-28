@@ -62,6 +62,7 @@ export default function SummaryPage({ params }: Props) {
           fullWidth
           variant='contained'
           onClick={goNext}
+          disabled={!selectedDate || !selectedTime}
         >
           Продовжити
         </Button>
@@ -78,10 +79,6 @@ export default function SummaryPage({ params }: Props) {
           p: 2,
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Деталі
-        </Typography>
-
         <Box display={'flex'} mt={2} alignItems={'center'}>
           <Typography variant="body1" gutterBottom textAlign={'center'} display={'flex'} alignItems={'center'}>
             <AccessTimeIcon fontSize='medium' sx={{ mr: 1 }} />

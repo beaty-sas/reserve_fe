@@ -57,9 +57,6 @@ export default function SummaryPage({ params }: Props) {
           p: 2,
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Деталі
-        </Typography>
         <Typography variant="h6" gutterBottom mt={3}>
           Обрані послуги
         </Typography>

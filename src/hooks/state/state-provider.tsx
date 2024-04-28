@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { IOffer } from "src/types/offer";
 import { useLocalStorage } from "../use-local-storage";
 import { AttachemtnFile, SharedStateContext } from "./state-context";
@@ -53,6 +53,20 @@ export function SharedStateProvider({ children }: Props) {
     update('comment', comment);
   }, [update]);
 
+  const setLastUpdated = useCallback(() => {
+    update('lastUpdated', new Date().toISOString());
+  }, [update]);
+
+  useEffect(() => {
+    setLastUpdated();
+  }, [setLastUpdated, setAttachments, setComment, setSelectedDate, setSelectedOffers, setSelectedTime, setUserName, setUserPhone]);
+
+  useEffect(() => {
+    if (new Date().getTime() - new Date(state.lastUpdated).getTime() > 1000 * 60 * 60) {
+      reset();
+    }
+  }, [state.lastUpdated, reset]);
+
   const memoizedValue = useMemo(
     () => ({
       ...state,
@@ -80,5 +94,5 @@ export function SharedStateProvider({ children }: Props) {
     ]
   );
 
-  return <SharedStateContext.Provider value={ memoizedValue }> { children }</SharedStateContext.Provider>;
+  return <SharedStateContext.Provider value={memoizedValue}> {children}</SharedStateContext.Provider>;
 }

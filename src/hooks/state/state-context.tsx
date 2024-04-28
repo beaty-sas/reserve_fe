@@ -25,6 +25,7 @@ type SharedStateType = {
   comment: string;
   setAttachments: (attachments: AttachemtnFile[]) => void;
   attachments: AttachemtnFile[];
+  reset: () => void;
 };
 
 export const SharedStateContext = createContext({} as SharedStateType);

@@ -1,7 +1,7 @@
 'use client';
 
 import isPast from 'date-fns/isPast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import uk from 'date-fns/locale/uk';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -18,7 +18,7 @@ import { useSharedState } from 'src/hooks/state';
 
 export default function TimeSlotView({ slug }: { slug: string }) {
   const theme = useTheme();
-  const { setSelectedDate, setSelectedTime, selectedTime, selectedOffers } = useSharedState();
+  const { setSelectedDate, setSelectedTime, selectedTime, selectedDate, selectedOffers } = useSharedState();
   const [value, setValue] = useState<Date | null>(new Date());
 
   const formattedDate = value?.toISOString().split('T')[0];
@@ -33,6 +33,13 @@ export default function TimeSlotView({ slug }: { slug: string }) {
     { title: 'День', times: lunchTimes },
     { title: 'Вечір', times: eveningTimes }
   ]
+
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(new Date().toISOString().split('T')[0]);
+    }
+  }, []);
+
 
   const isTimeAvailable = (time: string) => {
     return workingHours?.some((item) => {
@@ -83,11 +90,15 @@ export default function TimeSlotView({ slug }: { slug: string }) {
             ml: 3,
             mr: 3,
             mb: 2,
+            pt: 2,
+            pr: 2,
+            bl: 2,
+            pl: 2,
+            pb: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'start',
             minHeight: 60,
-            pl: 2,
           }}
         >
           <Box flex={2}>
@@ -95,7 +106,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
               {time.title}
             </Typography>
           </Box>
-          <Box flex={8} display={'flex'}>
+          <Box flex={8} display={'flex'} flexWrap={'wrap'} overflow={'wrap'}>
             {time.times.map((time, index) => {
               const isAvailable = isTimeAvailable(time);
 
@@ -104,6 +115,7 @@ export default function TimeSlotView({ slug }: { slug: string }) {
                   key={index}
                   sx={{
                     ml: 1,
+                    mb: 1,
                     borderWidth: 1,
                     border: isAvailable ? 1 : 0,
                     borderColor: theme.palette.primary.main,

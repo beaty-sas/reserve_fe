@@ -9,6 +9,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 import { useGetBusiness } from 'src/api/business';
 import { bgGradient } from 'src/theme/css';
+import Link from 'next/link';
 
 
 export default function InfoPage({ params }: { params: { slug: string } }) {
@@ -90,12 +91,24 @@ export default function InfoPage({ params }: { params: { slug: string } }) {
               justifyContent: {
                 sm: 'center',
                 md: 'flex-end',
+                xs: 'center',
               },
             },
           }}
         >
           <Tab key={1} icon={<LocationOnIcon />} label={business?.location?.name} value={1} />
-          <Tab key={2} icon={<LocalPhoneIcon />} label={business?.phone_number} value={2} />
+          <Tab
+            key={2}
+            icon={<LocalPhoneIcon />}
+            label={business?.phone_number}
+            value={2}
+          >
+            {business?.phone_number ? (
+              <Link href={`tel:${business.phone_number}`}>
+                <a>Call</a>
+              </Link>
+            ) : ''}
+          </Tab>
         </Tabs>
       </Box>
     </Card>

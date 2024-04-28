@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Card, Divider, Typography } from "@mui/material";
+import { Box, Card, Divider, Typography, useTheme } from "@mui/material";
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -8,6 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { useSharedState } from "src/hooks/state";
 import { useGetBusiness } from "src/api/business";
+import Image from "src/components/image";
 
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 export default function SummaryPage({ params }: Props) {
   const { selectedOffers, selectedDate, selectedTime } = useSharedState();
   const { business } = useGetBusiness(params.slug);
+  const theme = useTheme();
 
   return (
     <Box>
@@ -83,6 +85,19 @@ export default function SummaryPage({ params }: Props) {
         ))}
       </Card>
 
+      <Box
+        alignItems={'center'}
+        flexDirection={'row'}
+        display={'flex'}
+        justifyContent={'center'}
+        pb={2}
+        flex={1}
+      >
+        <Typography variant="subtitle1" color={theme.palette.grey[400]} mr={1}>
+          Працює на
+        </Typography>
+        <Image src={'/assets/logo.svg'} alt={'logo'} sx={{ width: 40, height: 40 }} />
+      </Box>
     </Box>
   );
 }
